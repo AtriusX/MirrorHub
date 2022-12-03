@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object Versions {
 
+    const val HOPLITE_VERSION = "2.7.0"
     const val KOTEST_VERSION = "5.5.4"
     const val MOCKK_VERSION = "1.13.3"
 }
@@ -12,13 +13,16 @@ plugins {
 }
 
 group = "xyz.atrius"
-version = "1.0-SNAPSHOT"
+version = "0.1"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    implementation("com.sksamuel.hoplite:hoplite-core:${Versions.HOPLITE_VERSION}")
+    implementation("com.sksamuel.hoplite:hoplite-yaml:${Versions.HOPLITE_VERSION}")
+    implementation("com.sksamuel.hoplite:hoplite-watch:${Versions.HOPLITE_VERSION}")
     implementation("com.apollographql.apollo3:apollo-runtime:3.7.1")
 
     testImplementation("io.kotest:kotest-runner-junit5:${Versions.KOTEST_VERSION}")
@@ -30,5 +34,5 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "11"
 }
