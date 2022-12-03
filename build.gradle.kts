@@ -23,6 +23,7 @@ dependencies {
     implementation("com.sksamuel.hoplite:hoplite-core:${Versions.HOPLITE_VERSION}")
     implementation("com.sksamuel.hoplite:hoplite-yaml:${Versions.HOPLITE_VERSION}")
     implementation("com.sksamuel.hoplite:hoplite-watch:${Versions.HOPLITE_VERSION}")
+    implementation("com.apollographql.apollo3:apollo-runtime:3.7.1")
 
     testImplementation("io.kotest:kotest-runner-junit5:${Versions.KOTEST_VERSION}")
     testImplementation("io.mockk:mockk:${Versions.MOCKK_VERSION}")
