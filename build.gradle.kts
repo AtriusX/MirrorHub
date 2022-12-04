@@ -5,11 +5,14 @@ object Versions {
     const val HOPLITE_VERSION = "2.7.0"
     const val KOTEST_VERSION = "5.5.4"
     const val MOCKK_VERSION = "1.13.3"
+    const val KOIN_VERSION = "3.2.2"
+    const val KOIN_ANNOTATIONS_VERSION = "1.0.3"
 }
 
 
 plugins {
     kotlin("jvm") version "1.7.20"
+    id("com.google.devtools.ksp") version "1.7.20-1.0.7"
 }
 
 group = "xyz.atrius"
@@ -24,6 +27,10 @@ dependencies {
     implementation("com.sksamuel.hoplite:hoplite-yaml:${Versions.HOPLITE_VERSION}")
     implementation("com.sksamuel.hoplite:hoplite-watch:${Versions.HOPLITE_VERSION}")
     implementation("com.apollographql.apollo3:apollo-runtime:3.7.1")
+    implementation("io.insert-koin:koin-core:${Versions.KOIN_VERSION}")
+    implementation("io.insert-koin:koin-annotations:${Versions.KOIN_ANNOTATIONS_VERSION}")
+
+    ksp("io.insert-koin:koin-ksp-compiler:${Versions.KOIN_ANNOTATIONS_VERSION}")
 
     testImplementation("io.kotest:kotest-runner-junit5:${Versions.KOTEST_VERSION}")
     testImplementation("io.mockk:mockk:${Versions.MOCKK_VERSION}")
@@ -35,4 +42,8 @@ tasks.test {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
+}
+
+sourceSets.main {
+    java.srcDirs("build/generated/ksp/main/kotlin")
 }
