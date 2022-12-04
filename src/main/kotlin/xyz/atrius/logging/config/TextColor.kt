@@ -1,6 +1,8 @@
 package xyz.atrius.logging.config
 
 /**
+ * @author Atri
+ *
  * Provides a set of ANSI color codes for use in application terminals.
  */
 @Suppress("unused")
@@ -25,11 +27,11 @@ enum class TextColor(private val color: String) {
      * requested color, and reset the string directly after. This likely
      * will not work for nested formats.
      *
-     * @param input The string to color.
+     * @param input The object to color.
      *
      * @return The formatted string.
      */
-    fun format(input: String): String {
+    fun format(input: Any?): String {
         return "${color}$input${RESET.color}"
     }
 }

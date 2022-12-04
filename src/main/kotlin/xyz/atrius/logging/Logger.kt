@@ -3,11 +3,12 @@ package xyz.atrius.logging
 import xyz.atrius.logging.config.LogLevel
 import xyz.atrius.logging.config.LoggerConfig
 import xyz.atrius.logging.config.LoggerTemplate
-import xyz.atrius.logging.config.defaultConfig
 import java.time.Instant
 import kotlin.reflect.KClass
 
 /**
+ * @author Atri
+ *
  * Logger implementation for application.
  *
  * @property originator The originating object of the logger.
@@ -16,7 +17,8 @@ import kotlin.reflect.KClass
 @Suppress("unused")
 class Logger<T : Any>(
     private val originator: KClass<T>,
-    private val loggerConfig: LoggerConfig = defaultConfig
+    private val loggerConfig: LoggerConfig,
+    private val template: LoggerTemplate
 ) {
 
     /**
@@ -24,7 +26,7 @@ class Logger<T : Any>(
      *
      * @param msg The message to log.
      */
-    fun fatal(msg: String) =
+    fun fatal(msg: Any?) =
         log(msg, LogLevel.FATAL)
 
     /**
@@ -32,7 +34,7 @@ class Logger<T : Any>(
      *
      * @param msg The message to log.
      */
-    fun error(msg: String) =
+    fun error(msg: Any?) =
         log(msg, LogLevel.ERROR)
 
     /**
@@ -40,7 +42,7 @@ class Logger<T : Any>(
      *
      * @param msg The message to log.
      */
-    fun warn(msg: String) =
+    fun warn(msg: Any?) =
         log(msg, LogLevel.WARN)
 
     /**
@@ -48,7 +50,7 @@ class Logger<T : Any>(
      *
      * @param msg The message to log.
      */
-    fun info(msg: String) =
+    fun info(msg: Any?) =
         log(msg, LogLevel.INFO)
 
     /**
@@ -56,7 +58,7 @@ class Logger<T : Any>(
      *
      * @param msg The message to log.
      */
-    fun debug(msg: String) =
+    fun debug(msg: Any?) =
         log(msg, LogLevel.DEBUG)
 
     /**
@@ -64,7 +66,7 @@ class Logger<T : Any>(
      *
      * @param msg The message to log.
      */
-    fun trace(msg: String) =
+    fun trace(msg: Any?) =
         log(msg, LogLevel.TRACE)
 
     /**
@@ -75,14 +77,14 @@ class Logger<T : Any>(
      * @param logLevel The logging level of the message.
      */
     fun log(
-        msg: String,
+        msg: Any?,
         logLevel: LogLevel
     ) = when (LogLevel.permitLogging(loggerConfig.highestLoggingLevel, logLevel)) {
         true -> printMessage(msg, logLevel)
         else -> Unit
     }
 
-    internal fun printMessage(msg: String, logLevel: LogLevel) {
+    private fun printMessage(msg: Any?, logLevel: LogLevel) {
         val level = getLevelColor(logLevel)
         val originator = processOriginator()
         val time = processTimestamp()
@@ -124,9 +126,9 @@ class Logger<T : Any>(
     }
 
     private fun processMessage(
-        msg: String
+        msg: Any?
     ): String = when(val color = loggerConfig.messageColor) {
-        null -> msg
+        null -> msg.toString()
         else -> color.format(msg)
     }
 
@@ -136,33 +138,8 @@ class Logger<T : Any>(
         time: String,
         message: String
     ): String = loggerConfig.loggerFormat
-        .replace(LoggerTemplate.LEVEL, level)
-        .replace(LoggerTemplate.ORIGINATOR, originator ?: "")
-        .replace(LoggerTemplate.TIME, time)
-        .replace(LoggerTemplate.MESSAGE, message)
-
-    companion object {
-
-        /**
-         * Generates a [Logger] using type parameter syntax.
-         *
-         * @param logLevel The highest permitted logging level.
-         *
-         * @return A [Logger] instance set at the given [logLevel].
-         */
-        inline fun <reified T : Any> create(
-            logLevel: LogLevel = LogLevel.INFO
-        ): Logger<T> = Logger(T::class, LoggerConfig(logLevel))
-
-        /**
-         * Generates a [Logger] using type parameter syntax.
-         *
-         * @param config The logger config to provide to the logger.
-         *
-         * @return The newly created [Logger] instance.
-         */
-        inline fun <reified T : Any> create(
-            config: LoggerConfig
-        ): Logger<T> = Logger(T::class, config)
-    }
+        .replace(template.LEVEL, level)
+        .replace(template.ORIGINATOR, originator ?: "")
+        .replace(template.TIME, time)
+        .replace(template.MESSAGE, message)
 }
