@@ -1,3 +1,19 @@
 accounts: []
 refresh-interval: 1h
 account-token: null
+logger-config:
+  highest-logging-level: INFO
+  log-level-colors:
+    FATAL: RED
+    ERROR: BRIGHT_RED
+    WARN: YELLOW
+    INFO: GREEN
+    DEBUG: CYAN
+    TRACE: MAGENTA
+  originator-color: BRIGHT_YELLOW
+  timestamp-color: BRIGHT_BLUE
+  message-color: GREEN
+  level-padding: 7
+  originator-padding: 25
+  padding-character: .
+  logger-format: "[%L% - %O%] -> %T%: %M%"

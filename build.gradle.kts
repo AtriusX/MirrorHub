@@ -7,6 +7,7 @@ object Versions {
     const val MOCKK_VERSION = "1.13.3"
     const val KOIN_VERSION = "3.2.2"
     const val KOIN_ANNOTATIONS_VERSION = "1.0.3"
+    const val KOTEST_KOIN_VERSION = "1.1.0"
 }
 
 
@@ -33,6 +34,9 @@ dependencies {
     ksp("io.insert-koin:koin-ksp-compiler:${Versions.KOIN_ANNOTATIONS_VERSION}")
 
     testImplementation("io.kotest:kotest-runner-junit5:${Versions.KOTEST_VERSION}")
+    testImplementation("io.insert-koin:koin-test:${Versions.KOIN_VERSION}")
+    testImplementation("io.insert-koin:koin-test-junit5:${Versions.KOIN_VERSION}")
+    testImplementation("io.kotest.extensions:kotest-extensions-koin:${Versions.KOTEST_KOIN_VERSION}")
     testImplementation("io.mockk:mockk:${Versions.MOCKK_VERSION}")
 }
 
