@@ -1,0 +1,7 @@
+# Retrieves the date at which an account was created.
+query GetUserCreationDate($user: String!) {
+
+    user(login: $user) {
+        createdAt
+    }
+}

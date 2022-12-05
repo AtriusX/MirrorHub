@@ -1,0 +1,10 @@
+# Retrieves the rate limit from the Github API for the current authorization.
+# We use this to inform decisions about whether or not we can execute another
+# query or if we need to wait.
+query GetRateLimit {
+    rateLimit {
+        cost
+        remaining
+        limit
+    }
+}

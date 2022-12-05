@@ -10,10 +10,10 @@ object Versions {
     const val KOTEST_KOIN_VERSION = "1.1.0"
 }
 
-
 plugins {
     kotlin("jvm") version "1.7.20"
     id("com.google.devtools.ksp") version "1.7.20-1.0.7"
+    id("com.apollographql.apollo3") version "3.7.1"
 }
 
 group = "xyz.atrius"
@@ -50,4 +50,10 @@ tasks.withType<KotlinCompile> {
 
 sourceSets.main {
     java.srcDirs("build/generated/ksp/main/kotlin")
+}
+
+apollo {
+    packageName.set("xyz.atrius.graphql")
+    excludes.add("src/main/graphql/schema.graphql")
+    generateKotlinModels.set(true)
 }
