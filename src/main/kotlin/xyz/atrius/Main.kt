@@ -2,8 +2,8 @@ package xyz.atrius
 
 import org.koin.core.context.startKoin
 import org.koin.ksp.generated.module
+import xyz.atrius.api.github.GithubApi
 import xyz.atrius.config.AppConfig
-import xyz.atrius.data.config.SystemConfigProvider
 import xyz.atrius.logging.LoggerProvider
 
 val koin = startKoin { modules(AppConfig().module) }
@@ -11,15 +11,18 @@ val koin = startKoin { modules(AppConfig().module) }
 
 object Main {
 
-    fun main() {
+    suspend fun main(user: String) {
         val logger = koin
             .get<LoggerProvider>()
             .create<Main>()
-        koin.get<SystemConfigProvider>()
-            .addSubscriber(logger::info)
-            .addErrorHandler { logger.error(it.message) }
-        while (true) {}
+        val client = koin
+            .get<GithubApi>()
+        client.getContributions(user)
+            .filter { it.commitCount > 0 }
+            .map { "${it.date} > ${it.commitCount}" }
+            .forEach(logger::info)
     }
 }
 
-fun main() = Main.main()
+suspend fun main(args: Array<String>) =
+    Main.main(args.getOrNull(0) ?: "AtriusX")

@@ -1,0 +1,18 @@
+# Retrieves a user's contributions from the given date up to a year in the future. To
+# retrieve all of a user's contributions, it is necessary to run this query multiple
+# times to cover each year an account has existed.
+query GetUserContributions($user: String!, $creationDate: DateTime!) {
+    user(login: $user) {
+        contributionsCollection(from: $creationDate) {
+            contributionYears
+            contributionCalendar {
+                weeks {
+                    contributionDays {
+                        contributionCount
+                        date
+                    }
+                }
+            }
+        }
+    }
+}

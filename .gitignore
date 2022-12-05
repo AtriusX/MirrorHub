@@ -44,3 +44,4 @@ bin/
 .DS_Store
 /.idea/
 /src/main/graphql/schema.json
+/configurations/
