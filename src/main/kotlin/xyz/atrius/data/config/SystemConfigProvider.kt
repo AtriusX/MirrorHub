@@ -41,4 +41,16 @@ class SystemConfigProvider(
     fun addSubscriber(block: (SystemConfig) -> Unit): SystemConfigProvider = apply {
         configLoader.subscribe(block)
     }
+
+    /**
+     * Appends an error handler function to the [ConfigLoader] object. Can be used to monitor
+     * illegal changes to the configuration as they are saved.
+     *
+     * @param block The function to run when an error has been encountered.
+     *
+     * @return The current instance of [SystemConfigProvider].
+     */
+    fun addErrorHandler(block: (Throwable) -> Unit): SystemConfigProvider = apply {
+        configLoader.withErrorHandler(block)
+    }
 }

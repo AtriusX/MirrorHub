@@ -15,8 +15,9 @@ object Main {
         val logger = koin
             .get<LoggerProvider>()
             .create<Main>()
-        val config = koin.get<SystemConfigProvider>()
-        config.addSubscriber(logger::info)
+        koin.get<SystemConfigProvider>()
+            .addSubscriber(logger::info)
+            .addErrorHandler { logger.error(it.message) }
         while (true) {}
     }
 }

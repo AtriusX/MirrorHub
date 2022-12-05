@@ -2,6 +2,7 @@ package xyz.atrius.logging
 
 import xyz.atrius.logging.config.LogLevel
 import xyz.atrius.logging.config.LoggerConfig
+import xyz.atrius.logging.config.LoggerConfigProvider
 import xyz.atrius.logging.config.LoggerTemplate
 import java.time.Instant
 import kotlin.reflect.KClass
@@ -17,9 +18,12 @@ import kotlin.reflect.KClass
 @Suppress("unused")
 class Logger<T : Any>(
     private val originator: KClass<T>,
-    private val loggerConfig: LoggerConfig,
+    private val configProvider: LoggerConfigProvider,
     private val template: LoggerTemplate
 ) {
+
+    private val loggerConfig: LoggerConfig
+        get() = configProvider.retrieve()
 
     /**
      * Logs a fatal error message.
@@ -84,7 +88,7 @@ class Logger<T : Any>(
         else -> Unit
     }
 
-    private fun printMessage(msg: Any?, logLevel: LogLevel) {
+    internal fun printMessage(msg: Any?, logLevel: LogLevel) {
         val level = getLevelColor(logLevel)
         val originator = processOriginator()
         val time = processTimestamp()
@@ -98,7 +102,7 @@ class Logger<T : Any>(
     ): String {
         // Apply padding to level name
         val padded = level.name
-            .padStart(loggerConfig.levelPadding, loggerConfig.paddingCharacter)
+            .padStart(loggerConfig.levelPadding, loggerConfig.paddingCharacter[0])
         // Retrieve the color code for the given level if present
         return when(val color = loggerConfig.logLevelColors[level]){
             null -> padded
@@ -109,7 +113,7 @@ class Logger<T : Any>(
     private fun processOriginator(): String? {
         // Apply padding to originator name
         val padded = originator.simpleName
-            ?.padEnd(loggerConfig.originatorPadding, loggerConfig.paddingCharacter)
+            ?.padEnd(loggerConfig.originatorPadding, loggerConfig.paddingCharacter[0])
         // Apply coloring to originator name if present
         return when (val color = loggerConfig.originatorColor) {
             null -> padded

@@ -1,7 +1,6 @@
 package xyz.atrius.config
 
 import org.koin.core.annotation.*
-import xyz.atrius.logging.config.LoggerConfig
 
 /**
  * @author Atri
@@ -10,12 +9,4 @@ import xyz.atrius.logging.config.LoggerConfig
  */
 @Module(includes = [FileConfig::class])
 @ComponentScan("xyz.atrius")
-class AppConfig {
-
-    /**
-     * Provides a default logger configuration.
-     */
-    @Single
-    fun loggerConfig(): LoggerConfig =
-        LoggerConfig()
-}
+class AppConfig

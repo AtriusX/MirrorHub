@@ -1,6 +1,8 @@
 package xyz.atrius.logging.config
 
 /**
+ * @author Atri
+ *
  * General configuration object for the logger system.
  *
  * @property highestLoggingLevel The highest permitted logging event level for all messages from this logger.
@@ -14,25 +16,13 @@ package xyz.atrius.logging.config
  * @property loggerFormat The format to use for the logger message, uses templates provided in [LoggerTemplate].
  */
 data class LoggerConfig(
-    val highestLoggingLevel: LogLevel = LogLevel.INFO,
-    val logLevelColors: Map<LogLevel, TextColor> = mapOf(
-        LogLevel.FATAL to TextColor.RED,
-        LogLevel.ERROR to TextColor.BRIGHT_RED,
-        LogLevel.WARN to TextColor.YELLOW,
-        LogLevel.INFO to TextColor.GREEN,
-        LogLevel.DEBUG to TextColor.CYAN,
-        LogLevel.TRACE to TextColor.MAGENTA
-    ),
-    val originatorColor: TextColor? = TextColor.BRIGHT_YELLOW,
-    val timestampColor: TextColor? = TextColor.BRIGHT_BLUE,
-    val messageColor: TextColor? = TextColor.GREEN,
-    val levelPadding: Int = 7,
-    val originatorPadding: Int = 25,
-    val paddingCharacter: Char = '.',
-    val loggerFormat: String = "[%L% - %O%] -> %T%: %M%"
+    val highestLoggingLevel: LogLevel,
+    val logLevelColors: Map<LogLevel, TextColor>,
+    val originatorColor: TextColor?,
+    val timestampColor: TextColor?,
+    val messageColor: TextColor?,
+    val levelPadding: Int,
+    val originatorPadding: Int,
+    val paddingCharacter: String,
+    val loggerFormat: String
 )
-
-/**
- * Basic default configuration object.
- */
-val defaultConfig = LoggerConfig()
